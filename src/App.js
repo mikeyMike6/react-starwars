@@ -1,25 +1,68 @@
-import logo from './logo.svg';
-import './App.css';
+import Header from "./components/Header";
+import Heroes from "./components/Heroes";
+import AddHero from "./components/AddHero";
+import Filter from "./components/Filter";
+import { useState } from 'react'
 
-function App() {
+const App = () => {
+const [showAddHero, setShowAddHero] = useState(false)
+
+  const [heroes, setHeroes] = useState([
+    {
+        name: 'Luke Skywalker',
+        height: '172',
+        mass: '77',
+        eye_color: 'blue',
+        gender: 'male',
+    },
+    {
+        name: 'Darth Vader',
+        height: '202',
+        mass: '136',
+        eye_color: 'yellow',
+        gender: 'male',
+    },
+    {
+        name: 'Leia Organa',
+        height: '150',
+        mass: '49',
+        eye_color: 'brown',
+        gender: 'female',
+    },
+    {
+        name: 'Anakin Skywalker',
+        height: '188',
+        mass: '84',
+        eye_color: 'blue',
+        gender: 'male',
+    },
+])
+
+  const filterHeroesByMass = (mass) => {
+    setHeroes(heroes.filter((hero) => parseInt(hero.mass) >= mass))
+  }
+
+  const filterHeroesByHeight = (height) => {
+    setHeroes(heroes.filter((hero) => parseInt(hero.height) >= height))
+  }
+
+  const addHero = (hero) => {
+    setHeroes([...heroes, hero])
+  }
+
+  const deleteHero = (name) => {
+    setHeroes(heroes.filter((hero) => hero.name !== name))
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      <Header onAdd={() => setShowAddHero(!showAddHero)} showAdd={showAddHero}/>
+      {showAddHero ? <AddHero onAdd={addHero}/> : <Filter filterMass={filterHeroesByMass} filterHeight={filterHeroesByHeight}/>}
+      {heroes.length > 0 ?  
+        <Heroes heroes={heroes} onDelete={deleteHero}/>
+      : 'Han solo shot first'}
     </div>
   );
 }
+
 
 export default App;
